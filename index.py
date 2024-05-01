@@ -2,6 +2,8 @@ from datetime import datetime
 from flask import Flask
 import requests
 
+from livePrediction import startPredictions
+
 app = Flask(__name__)
 
 
@@ -27,6 +29,16 @@ def send_notification(message):
     except Exception as e:
         print(e)
 
+    return "Done"
+
+
+@app.route('/start_prediction')
+def predict():
+    startPredictions()
+
+
+@app.route('/stop_prediction')
+def stop_prediction():
     return "Done"
 
 
