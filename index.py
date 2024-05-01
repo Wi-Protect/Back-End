@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, request
+from flask import Flask
 import requests
 
 app = Flask(__name__)
@@ -10,9 +10,9 @@ def hello_world():
     return 'Hello World'
 
 
-@app.route('/send_notification', methods=['POST'])
-def send_notification():
-    data = request.get_json()
+def send_notification(message):
+    data = {}
+    data['body'] = message
     data['appId'] = 21063
     data['appToken'] = "Ddk9268wY7cmcRKQEcY5zI"
     data['dateSent'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -20,9 +20,12 @@ def send_notification():
 
     url = "https://app.nativenotify.com/api/notification"
 
-    requests.post(url, json=data)
-
     # Send notification to user
+    try:
+        requests.post(url, json=data)
+
+    except Exception as e:
+        print(e)
 
     return "Done"
 
