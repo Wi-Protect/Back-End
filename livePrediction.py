@@ -9,6 +9,7 @@ import joblib
 import pywt
 import pandas as pd
 import time
+import threading
 
 from notificationSender import send_notification
 
@@ -22,6 +23,7 @@ AMP_AND_PHASE_COLUMNS_NAMES = ['id', 'time', 'amplitude1_1', 'amplitude2_1', 'am
 save_dir = './models/'
 
 gmm_models = []
+
 for i in range(6):
     model_filename = f'gmm_model_{i}.pkl'
     model_path = save_dir + model_filename
@@ -34,17 +36,26 @@ wavelet_name = 'gaus1'
 
 scales = np.arange(1, 128)
 
+recent = []
 
-def csi_data_read_parse(ser1, ser2):
-    # if ser1.isOpen():
-    #     print("open success SER 1")
-    # else:
-    #     print("open failed SER 1")
+SERIAL_PORT_1 = 'COM3'
+SERIAL_PORT_2 = 'COM8'
 
-    # if ser2.isOpen():
-    #     print("open success SER 2")
-    # else:
-    #     print("open failed SER 2")
+ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
+                     bytesize=8, parity='N', stopbits=1)
+
+ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
+                     bytesize=8, parity='N', stopbits=1)
+
+ifRun = True
+
+NIGHT_TIME = 0
+DAY_TIME = 1
+
+mode = NIGHT_TIME
+
+
+def csi_data_read_parse():
 
     count = 0
 
@@ -121,11 +132,6 @@ def csi_data_read_parse(ser1, ser2):
             amplitudes.append(sqrt(imaginary2[i] ** 2 + real2[i] ** 2))
             phases.append(atan2(imaginary2[i], real2[i]))
 
-        # print([csi_data[1]] + amplitudes+phases)
-        # csi_list.append([csi_data[1]] + amplitudes+phases)
-
-        # Get current date and time
-
         now = datetime.datetime.now()
 
         if count == 0:
@@ -158,15 +164,6 @@ def csi_data_read_parse(ser1, ser2):
                     csi_list = np.zeros((1, 260))
 
                     startTime = datetime.datetime.now()
-
-                    ser1.close()
-                    ser2.close()
-
-                    ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                                         bytesize=8, parity='N', stopbits=1)
-
-                    ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                                         bytesize=8, parity='N', stopbits=1)
                     continue
 
 
@@ -197,22 +194,32 @@ def get25(group):
     return forPredict
 
 
-recent = []
-
-
 def addRecent(data):
+    global recent
     if len(recent) == 5:
         recent.pop(0)
     recent.append(data)
 
 
 def predictionMapping(prediction):
-    if prediction == 0 or prediction == 4:
-        return 0
-    elif prediction == 5:
-        return 1
+
+    global mode
+
+    if mode == NIGHT_TIME:
+
+        if prediction == 0 or prediction == 4:
+            return 0
+        elif prediction == 5:
+            return 1
+        else:
+            return 2
+
     else:
-        return 2
+
+        if prediction == 0 or prediction == 4:
+            return 0
+        else:
+            return 2
 
 
 def predict(prediction):
@@ -260,25 +267,9 @@ def caliberate():
 
     wavelet_list = np.zeros((1, 25))
 
-    ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
-
-    ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
-
     time.sleep(2)
 
     for i in range(20):
-
-        if (i % 8 == 0):
-            ser1.close()
-            ser2.close()
-
-            ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                                 bytesize=8, parity='N', stopbits=1)
-
-            ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                                 bytesize=8, parity='N', stopbits=1)
 
         csi_data = pd.DataFrame(csi_data_read_parse(ser1, ser2))
 
@@ -289,10 +280,6 @@ def caliberate():
         wavelet_list = np.vstack([wavelet_list, wavelet])
 
         print("Data Point Collected : ", i)
-
-        if i == 99:
-            ser1.close()
-            ser2.close()
 
     wavelet_list = np.delete(wavelet_list, np.s_[:1], axis=0)
 
@@ -307,53 +294,23 @@ def caliberate():
     print("Caliberation Completed...")
 
 
-SERIAL_PORT_1 = 'COM3'
-SERIAL_PORT_2 = 'COM8'
-
-
-caliberate()
-
-i = 0
-
-ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                     bytesize=8, parity='N', stopbits=1)
-
-ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                     bytesize=8, parity='N', stopbits=1)
-
-ifRun = True
-
-
 def stopPredictions():
+    global ifRun
     ifRun = False
 
 
 def startPredictions():
+    global ifRun
     ifRun = True
-    getPredictions()
+    thread = threading.Thread(target=getPredictions)
+    thread.start()
 
 
 def getPredictions():
 
     while ifRun:
 
-        if i == 0:
-            ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                                 bytesize=8, parity='N', stopbits=1)
-
-            ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                                 bytesize=8, parity='N', stopbits=1)
-
-        elif i % 5 == 0:
-
-            ser2.close()
-            ser1.close()
-
-            i = 0
-
-            continue
-
-        csi_data = pd.DataFrame(csi_data_read_parse(ser1, ser2))
+        csi_data = pd.DataFrame(csi_data_read_parse())
 
         csi_data.columns = AMP_AND_PHASE_COLUMNS_NAMES
 
@@ -363,6 +320,18 @@ def getPredictions():
 
         print("activity" + str(pred))
 
-        send_notification("Activity Detected : " + str(pred))
+        if (pred == 1):
+            time.sleep(60*5)
 
-        i += 1
+        if (pred == 2):
+            send_notification("Intruder Detected")
+
+
+def changeModeToNight():
+    global mode
+    mode = NIGHT_TIME
+
+
+def changeModeToDay():
+    global mode
+    mode = DAY_TIME

@@ -1,8 +1,6 @@
-from datetime import datetime
 from flask import Flask
-import requests
 
-from livePrediction import startPredictions, stopPredictions
+from livePrediction import changeModeToNight, startPredictions, stopPredictions
 
 app = Flask(__name__)
 
@@ -14,6 +12,7 @@ def hello_world():
 
 @app.route('/start_prediction')
 def predict():
+
     startPredictions()
     return "Prediction started"
 
@@ -24,5 +23,17 @@ def stop_prediction():
     return "Prediction stopped"
 
 
+@app.route('/night-mode', ['POST'])
+def night_mode():
+    changeModeToNight()
+    return "Night mode activated"
+
+
+@app.route('/day-mode', ['POST'])
+def day_mode():
+    changeModeToNight()
+    return "Day mode activated"
+
+
 if __name__ == '__main__':
-    app.run()
+    app.run(host='192.168.1.14', port=5000)
