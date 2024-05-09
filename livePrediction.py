@@ -10,6 +10,8 @@ import pywt
 import pandas as pd
 import time
 
+from notificationSender import send_notification
+
 DATA_COLUMNS_NAMES = ["type", "id", "mac", "rssi", "rate", "sig_mode", "mcs", "bandwidth", "smoothing", "not_sounding", "aggregation", "stbc", "fec_coding",
                       "sgi", "noise_floor", "ampdu_cnt", "channel", "secondary_channel", "local_timestamp", "ant", "sig_len", "rx_state", "len", "first_word", "data"]
 
@@ -335,16 +337,21 @@ def getPredictions():
 
     while ifRun:
 
-        if i % 5 == 0:
-
-            ser2.close()
-            ser1.close()
-
+        if i == 0:
             ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
                                  bytesize=8, parity='N', stopbits=1)
 
             ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
                                  bytesize=8, parity='N', stopbits=1)
+
+        elif i % 5 == 0:
+
+            ser2.close()
+            ser1.close()
+
+            i = 0
+
+            continue
 
         csi_data = pd.DataFrame(csi_data_read_parse(ser1, ser2))
 
@@ -355,5 +362,7 @@ def getPredictions():
         print("Time" + str(datetime.datetime.now()))
 
         print("activity" + str(pred))
+
+        send_notification("Activity Detected : " + str(pred))
 
         i += 1
