@@ -302,11 +302,11 @@ def stopPredictions():
 def startPredictions():
     global ifRun
     ifRun = True
-    thread = threading.Thread(target=getPredictions)
+    thread = threading.Thread(target=getPredictionsBackground)
     thread.start()
 
 
-def getPredictions():
+def getPredictionsBackground():
 
     while ifRun:
 
@@ -324,6 +324,7 @@ def getPredictions():
             time.sleep(60*5)
 
         if (pred == 2):
+            print("Intruder Detected.")
             send_notification("Intruder Detected")
 
 
