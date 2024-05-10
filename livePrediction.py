@@ -307,8 +307,9 @@ def startPredictions():
 
 
 def getPredictionsBackground():
-
+    print("Into the function: Starting Prediction...")
     while ifRun:
+        print("Into the loop: Predicting...")
 
         csi_data = pd.DataFrame(csi_data_read_parse())
 
