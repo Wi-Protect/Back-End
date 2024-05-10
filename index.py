@@ -23,17 +23,17 @@ def stop_prediction():
     return "Prediction stopped"
 
 
-@app.route('/night-mode', ['POST'])
+@app.route('/night-mode', methods = ['POST'])
 def night_mode():
     changeModeToNight()
     return "Night mode activated"
 
 
-@app.route('/day-mode', ['POST'])
+@app.route('/day-mode', methods = ['POST'])
 def day_mode():
     changeModeToNight()
     return "Day mode activated"
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.14', port=5000)
+    app.run(host='192.168.96.46', port=5000)
