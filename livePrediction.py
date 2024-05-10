@@ -38,8 +38,8 @@ scales = np.arange(1, 128)
 
 recent = []
 
-SERIAL_PORT_1 = 'COM3'
-SERIAL_PORT_2 = 'COM8'
+SERIAL_PORT_1 = '/dev/ttyUSB0'
+SERIAL_PORT_2 = '/dev/ttyUSB1'
 
 ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
                      bytesize=8, parity='N', stopbits=1)
