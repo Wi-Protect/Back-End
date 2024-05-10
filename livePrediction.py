@@ -312,8 +312,10 @@ def getPredictionsBackground():
         print("Into the loop: Predicting...")
 
         csi_data = pd.DataFrame(csi_data_read_parse())
+        print(csi_data)
 
         csi_data.columns = AMP_AND_PHASE_COLUMNS_NAMES
+        print(csi_data.columns)
 
         pred = getPrediction(csi_data)
 
