@@ -56,15 +56,15 @@ mode = NIGHT_TIME
 
 
 def csi_data_read_parse():
-    if ser1.isOpen():
-        print("open success SER 1")
-    else:
-        print("open failed SER 1")
+    # if ser1.isOpen():
+    #     print("open success SER 1")
+    # else:
+    #     print("open failed SER 1")
 
-    if ser2.isOpen():
-        print("open success SER 2")
-    else:
-        print("open failed SER 2")
+    # if ser2.isOpen():
+    #     print("open success SER 2")
+    # else:
+    #     print("open failed SER 2")
 
     count = 0
 
@@ -75,8 +75,8 @@ def csi_data_read_parse():
     while True:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
-        print(strings1)
-        print(strings2)
+        # print(strings1)
+        # print(strings2)
         if not strings1 or not strings2:
             continue
 
