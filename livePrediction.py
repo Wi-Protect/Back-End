@@ -291,7 +291,7 @@ def caliberate():
 
     time.sleep(2)
 
-    for i in range(100):
+    for i in range(250):
 
         csi_data = pd.DataFrame(csi_data_read_parse())
 
@@ -352,7 +352,7 @@ def getPredictionsBackground():
             print("Intruder Detected.")
             send_notification("Intruder Detected")
             # print("Intruder Detected")
-            time.sleep(60*2)
+            time.sleep(30)
 
 
 def startPredictions():
