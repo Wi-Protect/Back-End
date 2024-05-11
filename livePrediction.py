@@ -183,6 +183,8 @@ def csi_data_read_parse():
                 else:
                     print("csi_list is empty")
 
+                    print("CSI LIST : ", csi_list)
+
                     count = 0
 
                     # csi_list = np.zeros((1, 260))
