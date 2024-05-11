@@ -36,7 +36,7 @@ wavelet_name = 'gaus1'
 
 scales = np.arange(1, 128)
 
-recent = []
+recent = [0, 0, 0, 0, 0]
 
 SERIAL_PORT_1 = '/dev/ttyUSB0'
 SERIAL_PORT_2 = '/dev/ttyUSB1'
