@@ -160,6 +160,7 @@ def csi_data_read_parse():
 
         if startTime + datetime.timedelta(seconds=1) >= datetime.datetime.now():
             count += 1
+            print(count)
             timeString = now.strftime("%H:%M:%S.%f")
             csi_list = np.vstack(
                 [csi_list, [csi_data1[1]] + [timeString] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]]])
