@@ -293,7 +293,7 @@ def caliberate():
 
     for i in range(20):
 
-        csi_data = pd.DataFrame(csi_data_read_parse(ser1, ser2))
+        csi_data = pd.DataFrame(csi_data_read_parse())
 
         csi_data.columns = AMP_AND_PHASE_COLUMNS_NAMES
 
