@@ -351,7 +351,8 @@ def getPredictionsBackground():
         if (pred == 2):
             print("Intruder Detected.")
             send_notification("Intruder Detected")
-            print("Intruder Detected")
+            # print("Intruder Detected")
+            time.sleep(60*2)
 
 
 def startPredictions():
