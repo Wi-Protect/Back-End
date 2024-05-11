@@ -350,6 +350,7 @@ def getPredictionsBackground():
         print("activity" + str(pred))
 
         if (pred == 1):
+            recent = [0, 0, 0, 0, 0]
             time.sleep(60*5)
 
         if (pred == 2):
