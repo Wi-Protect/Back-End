@@ -291,7 +291,7 @@ def caliberate():
 
     time.sleep(2)
 
-    for i in range(20):
+    for i in range(100):
 
         csi_data = pd.DataFrame(csi_data_read_parse())
 
@@ -313,7 +313,7 @@ def caliberate():
 
     gmm_models[0].fit(wavelet_list)
 
-    # joblib.dump(gmm_models[0], save_dir + 'gmm_model_0.pkl')
+    joblib.dump(gmm_models[0], save_dir + 'gmm_model_0.pkl')
 
     print("Caliberation Completed...")
 
