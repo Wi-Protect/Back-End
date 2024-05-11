@@ -183,11 +183,11 @@ def csi_data_read_parse():
                 else:
                     print("csi_list is empty")
 
-                    count = 1
+                    count = 0
 
-                    csi_list = np.zeros((1, 260))
+                    # csi_list = np.zeros((1, 260))
 
-                    startTime = datetime.datetime.now()
+                    # startTime = datetime.datetime.now()
 
 
 def getWavelet(data):
