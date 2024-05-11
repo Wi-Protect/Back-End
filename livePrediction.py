@@ -256,23 +256,25 @@ def predict(prediction):
             addRecent(prediction)
             return prediction
 
-        if recent[len(recent)-1] == recent[len(recent)-2] == prediction:
-            addRecent(prediction)
-            return prediction
-        elif recent[len(recent)-2] == recent[len(recent)-3] == prediction:
-            addRecent(prediction)
-            return prediction
         else:
-            if len(recent) > 3:
-                if recent == prediction:
-                    addRecent(prediction)
-                    return prediction
+
+            if recent[len(recent)-1] == recent[len(recent)-2] == prediction:
+                addRecent(prediction)
+                return prediction
+            elif recent[len(recent)-2] == recent[len(recent)-3] == prediction:
+                addRecent(prediction)
+                return prediction
+            else:
+                if len(recent) > 3:
+                    if recent == prediction:
+                        addRecent(prediction)
+                        return prediction
+                    else:
+                        addRecent(prediction)
+                        return recent[len(recent)-2]
                 else:
                     addRecent(prediction)
                     return recent[len(recent)-2]
-            else:
-                addRecent(prediction)
-                return recent[len(recent)-2]
     else:
         addRecent(prediction)
         return prediction
