@@ -56,16 +56,6 @@ mode = NIGHT_TIME
 
 
 def csi_data_read_parse():
-    # if ser1.isOpen():
-    #     print("open success SER 1")
-    # else:
-    #     print("open failed SER 1")
-
-    # if ser2.isOpen():
-    #     print("open success SER 2")
-    # else:
-    #     print("open failed SER 2")
-
     count = 0
 
     csi_list = np.zeros((1, 260))
@@ -75,8 +65,7 @@ def csi_data_read_parse():
     while True:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
-        # print(strings1)
-        # print(strings2)
+        # print(strings)
         if not strings1 or not strings2:
             continue
 
@@ -160,8 +149,6 @@ def csi_data_read_parse():
 
         if startTime + datetime.timedelta(seconds=1) >= datetime.datetime.now():
             count += 1
-            print(startTime)
-            print(count)
             timeString = now.strftime("%H:%M:%S.%f")
             csi_list = np.vstack(
                 [csi_list, [csi_data1[1]] + [timeString] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]]])
@@ -175,23 +162,20 @@ def csi_data_read_parse():
             else:
                 count -= 1
                 csi_list = np.delete(csi_list, np.s_[:1], axis=0)
-
-                if csi_list.size > 0:
+                try:
                     startTime = datetime.datetime.strptime(
                         csi_list[0, 1], "%H:%M:%S.%f")
                     startTime = datetime.datetime.combine(
                         datetime.date.today(), startTime.time())
-
-                else:
-                    print("csi_list is empty")
-
-                    print("CSI LIST : ", csi_list)
-
+                except:
+                    print("Error in time conversion")
                     count = 0
 
-                    # csi_list = np.zeros((1, 260))
+                    csi_list = np.zeros((1, 260))
 
-                    # startTime = datetime.datetime.now()
+                    startTime = datetime.datetime.now()
+
+                    continue
 
 
 def getWavelet(data):
