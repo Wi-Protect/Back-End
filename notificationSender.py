@@ -14,7 +14,7 @@ def send_notification(message):
 
     # Send notification to user
     try:
-        requests.post(url, json=data)
+        requests.post(url, json=data, verify=False)
 
     except Exception as e:
         print(e)
