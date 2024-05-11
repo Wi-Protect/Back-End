@@ -248,6 +248,7 @@ def predictionMapping(prediction):
 
 
 def predict(prediction):
+    global recent
     prediction = predictionMapping(prediction)
     if len(recent) > 2:
 
