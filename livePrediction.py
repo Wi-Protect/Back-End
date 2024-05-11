@@ -38,8 +38,8 @@ scales = np.arange(1, 128)
 
 recent = []
 
-SERIAL_PORT_1 = 'COM3'
-SERIAL_PORT_2 = 'COM8'
+SERIAL_PORT_1 = '/dev/ttyUSB0'
+SERIAL_PORT_2 = '/dev/ttyUSB1'
 
 ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
                      bytesize=8, parity='N', stopbits=1)
@@ -56,6 +56,15 @@ mode = NIGHT_TIME
 
 
 def csi_data_read_parse():
+    # if ser1.isOpen():
+    #     print("open success SER 1")
+    # else:
+    #     print("open failed SER 1")
+
+    # if ser2.isOpen():
+    #     print("open success SER 2")
+    # else:
+    #     print("open failed SER 2")
 
     count = 0
 
@@ -66,7 +75,8 @@ def csi_data_read_parse():
     while True:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
-        # print(strings)
+        # print(strings1)
+        # print(strings2)
         if not strings1 or not strings2:
             continue
 
@@ -84,22 +94,28 @@ def csi_data_read_parse():
         csi_data2 = next(csv_reader2)
 
         if len(csi_data1) != len(DATA_COLUMNS_NAMES) or len(csi_data2) != len(DATA_COLUMNS_NAMES):
-            print("element number is not equal")
+            # print("element number is not equal")
+            # print(csi_data1)
+            # print(csi_data2)
             continue
 
         try:
             csi_raw_data1 = json.loads(csi_data1[-1])
             csi_raw_data2 = json.loads(csi_data2[-1])
         except json.JSONDecodeError:
-            print(f"data is incomplete")
+            # print(f"data is incomplete")
+            # print(csi_data1)
+            # print(csi_data2)
             continue
 
         if len(csi_raw_data1) != 128 and len(csi_raw_data1) != 256 and len(csi_raw_data1) != 384:
-            print(f"element number is not equal: {len(csi_raw_data1)}")
+            # print(f"element number is not equal: {len(csi_raw_data1)}")
+            # print(csi_data1)
             continue
 
         if len(csi_raw_data2) != 128 and len(csi_raw_data2) != 256 and len(csi_raw_data2) != 384:
-            print(f"element number is not equal: {len(csi_raw_data2)}")
+            # print(f"element number is not equal: {len(csi_raw_data2)}")
+            # print(csi_data2)
             continue
 
         imaginary1 = []
@@ -131,6 +147,11 @@ def csi_data_read_parse():
         for i in range(int(len(csi_raw_data2) / 2)):
             amplitudes.append(sqrt(imaginary2[i] ** 2 + real2[i] ** 2))
             phases.append(atan2(imaginary2[i], real2[i]))
+
+        # print([csi_data[1]] + amplitudes+phases)
+        # csi_list.append([csi_data[1]] + amplitudes+phases)
+
+        # Get current date and time
 
         now = datetime.datetime.now()
 
@@ -164,6 +185,7 @@ def csi_data_read_parse():
                     csi_list = np.zeros((1, 260))
 
                     startTime = datetime.datetime.now()
+
                     continue
 
 
@@ -302,12 +324,18 @@ def stopPredictions():
 def getPredictionsBackground():
 
     global ifRun
+    ifRun = True
+    thread = threading.Thread(target=getPredictionsBackground)
+    thread.start()
 
+
+def getPredictionsBackground():
     while ifRun:
-
         csi_data = pd.DataFrame(csi_data_read_parse())
+        # print(csi_data)
 
         csi_data.columns = AMP_AND_PHASE_COLUMNS_NAMES
+        # print(csi_data.columns)
 
         pred = getPrediction(csi_data)
 
@@ -319,6 +347,7 @@ def getPredictionsBackground():
             time.sleep(60*5)
 
         if (pred == 2):
+            print("Intruder Detected.")
             send_notification("Intruder Detected")
             print("Intruder Detected")
 
