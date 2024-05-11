@@ -10,14 +10,14 @@ def hello_world():
     return 'Hello World'
 
 
-@app.route('/start_prediction')
+@app.route('/start_prediction', ['POST'])
 def predict():
 
     startPredictions()
     return "Prediction started"
 
 
-@app.route('/stop_prediction')
+@app.route('/stop_prediction', ['POST'])
 def stop_prediction():
     stopPredictions()
     return "Prediction stopped"

@@ -299,14 +299,9 @@ def stopPredictions():
     ifRun = False
 
 
-def startPredictions():
+def getPredictionsBackground():
+
     global ifRun
-    ifRun = True
-    thread = threading.Thread(target=getPredictions)
-    thread.start()
-
-
-def getPredictions():
 
     while ifRun:
 
@@ -325,6 +320,14 @@ def getPredictions():
 
         if (pred == 2):
             send_notification("Intruder Detected")
+            print("Intruder Detected")
+
+
+def startPredictions():
+    global ifRun
+    ifRun = True
+    thread = threading.Thread(target=getPredictionsBackground)
+    thread.start()
 
 
 def changeModeToNight():
