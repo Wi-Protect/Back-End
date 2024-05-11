@@ -56,6 +56,10 @@ mode = NIGHT_TIME
 
 
 def csi_data_read_parse():
+    global ser1
+
+    global ser2
+
     count = 0
 
     csi_list = np.zeros((1, 260))
