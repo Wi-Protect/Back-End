@@ -332,6 +332,7 @@ def getPredictionsBackground():
 
 
 def getPredictionsBackground():
+    global recent
     while ifRun:
         csi_data = pd.DataFrame(csi_data_read_parse())
         # print(csi_data)
@@ -352,6 +353,7 @@ def getPredictionsBackground():
             print("Intruder Detected.")
             send_notification("Intruder Detected")
             # print("Intruder Detected")
+            recent = [0, 0, 0, 0, 0]
             time.sleep(30)
 
 
