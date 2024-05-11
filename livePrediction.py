@@ -173,20 +173,20 @@ def csi_data_read_parse():
             else:
                 count -= 1
                 csi_list = np.delete(csi_list, np.s_[:1], axis=0)
-                try:
-                    startTime = datetime.datetime.strptime(
-                        csi_list[0, 1], "%H:%M:%S.%f")
-                    startTime = datetime.datetime.combine(
-                        datetime.date.today(), startTime.time())
-                except:
-                    print("Error in time conversion")
-                    count = 0
+                # try:
+                startTime = datetime.datetime.strptime(
+                    csi_list[0, 1], "%H:%M:%S.%f")
+                startTime = datetime.datetime.combine(
+                    datetime.date.today(), startTime.time())
+                # except:
+                #     print("Error in time conversion")
+                #     count = 0
 
-                    csi_list = np.zeros((1, 260))
+                #     csi_list = np.zeros((1, 260))
 
-                    startTime = datetime.datetime.now()
+                #     startTime = datetime.datetime.now()
 
-                    continue
+                #     continue
 
 
 def getWavelet(data):
