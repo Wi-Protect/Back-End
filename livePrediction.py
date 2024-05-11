@@ -72,6 +72,8 @@ def csi_data_read_parse():
 
     startTime = datetime.datetime.now()
 
+    oneDeleted = False
+
     while True:
         strings1 = str(ser1.readline())
         strings2 = str(ser2.readline())
@@ -163,8 +165,9 @@ def csi_data_read_parse():
             timeString = now.strftime("%H:%M:%S.%f")
             csi_list = np.vstack(
                 [csi_list, [csi_data1[1]] + [timeString] + amplitudes+phases + [csi_data1[3]] + [csi_data2[3]]])
-            if count == 1:
+            if count == 1 and not oneDeleted:
                 csi_list = np.delete(csi_list, np.s_[:1], axis=0)
+                oneDeleted = True
 
         else:
 
