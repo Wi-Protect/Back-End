@@ -1,6 +1,6 @@
 from flask import Flask
 
-from livePrediction import changeModeToNight, startPredictions, stopPredictions
+from livePrediction import caliberate, changeModeToNight, startPredictions, stopPredictions
 
 app = Flask(__name__)
 
@@ -33,6 +33,12 @@ def night_mode():
 def day_mode():
     changeModeToNight()
     return "Day mode activated"
+
+
+@app.route('/caliberate', methods=['POST'])
+def caliberate_model():
+    caliberate()
+    return "Caliberation done"
 
 
 if __name__ == '__main__':

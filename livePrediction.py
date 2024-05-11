@@ -313,6 +313,8 @@ def caliberate():
 
     gmm_models[0].fit(wavelet_list)
 
+    # joblib.dump(gmm_models[0], save_dir + 'gmm_model_0.pkl')
+
     print("Caliberation Completed...")
 
 
