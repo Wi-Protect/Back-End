@@ -291,7 +291,7 @@ def caliberate():
 
     time.sleep(2)
 
-    for i in range(250):
+    for i in range(300):
 
         csi_data = pd.DataFrame(csi_data_read_parse())
 
