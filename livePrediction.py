@@ -239,11 +239,13 @@ def lastOutput(inpt):
     addLastQueue(inpt)
 
     if (inpt == 1):
+        print("Input == 1")
         ifStandUpDetected = True
         return 0
 
     else:
         if ifStandUpDetected:
+            print("Is standup detcted :", ifStandUpDetected)
             ifStandUpDetected = False
             if inpt == 2 or inpt == 1:
                 return 1
