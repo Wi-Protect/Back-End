@@ -63,16 +63,6 @@ def csi_data_read_parse():
 
     global ser2
 
-    ser1.close()
-
-    ser2.close()
-
-    ser1 = serial.Serial(port=SERIAL_PORT_1, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
-
-    ser2 = serial.Serial(port=SERIAL_PORT_2, baudrate=921600,
-                         bytesize=8, parity='N', stopbits=1)
-
     count = 0
 
     csi_list = np.zeros((1, 260))
@@ -409,13 +399,13 @@ def getPredictionsBackground():
         if (pred == 1):
             recent = [0, 0, 0, 0, 0]
             lastQueue = [0, 0, 0, 0, 0]
-            # send_notification("Wakeup Detected",
-            #   "System will sleep for 5 minutes")
+            send_notification("Wakeup Detected",
+                              "System will sleep for 5 minutes")
             time.sleep(60*5)
 
         if (pred == 2):
             print("\t\tIntruder Detected.")
-            # send_notification("Intruder Detected", "Intruder Detected")
+            send_notification("Intruder Detected", "Intruder Detected")
             playAlarm()
             # print("Intruder Detected")
             recent = [0, 0, 0, 0, 0]
