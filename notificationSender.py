@@ -7,8 +7,8 @@ def send_notification(title, message):
     data['body'] = message
     data['appId'] = 21063
     data['appToken'] = "Ddk9268wY7cmcRKQEcY5zI"
-    # data['dateSent'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    data['title'] = "Intruder Detected"
+    data['dateSent'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    data['title'] = title
 
     url = "https://app.nativenotify.com/api/notification"
 
