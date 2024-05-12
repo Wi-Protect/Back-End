@@ -6,6 +6,16 @@ DAY_TIME = 1
 mode = NIGHT_TIME
 
 
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(host='192.168.104.46', port=5000)
+
+
 def predictionMapping(prediction):
 
     global mode
