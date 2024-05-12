@@ -54,6 +54,8 @@ DAY_TIME = 1
 
 mode = NIGHT_TIME
 
+lastQueue = [0, 0, 0, 0, 0]
+
 
 def csi_data_read_parse():
     global ser1
@@ -219,6 +221,26 @@ def get25(group):
     return forPredict
 
 
+def addLastQueue(data):
+    global lastQueue
+    if len(lastQueue) == 5:
+        lastQueue.pop(0)
+    lastQueue.append(data)
+
+
+def lastOutput(inpt):
+    global lastQueue
+    addLastQueue(inpt)
+
+    most_frequent = max(set(lastQueue), key=lastQueue.count)
+    return most_frequent
+
+
+def getLastOutput(inpt):
+    predicted = predict(inpt)
+    return lastOutput(predicted)
+
+
 def addRecent(data):
     global recent
     if len(recent) == 5:
@@ -286,7 +308,7 @@ def getPrediction(group):
     wavelet = pd.DataFrame(wavelet.reshape(1, -1))
     wavelet.columns = [str(i) for i in range(0, 25)]
     pred = int(getPredictions(wavelet))
-    return predict(pred)
+    return getLastOutput(pred)
 
 
 def caliberate():
@@ -339,6 +361,7 @@ def getPredictionsBackground():
 
 def getPredictionsBackground():
     global recent
+    global lastQueue
     while ifRun:
         csi_data = pd.DataFrame(csi_data_read_parse())
         # print(csi_data)
@@ -354,6 +377,7 @@ def getPredictionsBackground():
 
         if (pred == 1):
             recent = [0, 0, 0, 0, 0]
+            lastQueue = [0, 0, 0, 0, 0]
             time.sleep(60*5)
 
         if (pred == 2):
@@ -361,6 +385,7 @@ def getPredictionsBackground():
             send_notification("Intruder Detected")
             # print("Intruder Detected")
             recent = [0, 0, 0, 0, 0]
+            lastQueue = [0, 0, 0, 0, 0]
             time.sleep(30)
 
 
