@@ -409,13 +409,13 @@ def getPredictionsBackground():
         if (pred == 1):
             recent = [0, 0, 0, 0, 0]
             lastQueue = [0, 0, 0, 0, 0]
-            send_notification("Wakeup Detected",
-                              "System will sleep for 5 minutes")
+            # send_notification("Wakeup Detected",
+            #   "System will sleep for 5 minutes")
             time.sleep(60*5)
 
         if (pred == 2):
             print("\t\tIntruder Detected.")
-            send_notification("Intruder Detected", "Intruder Detected")
+            # send_notification("Intruder Detected", "Intruder Detected")
             playAlarm()
             # print("Intruder Detected")
             recent = [0, 0, 0, 0, 0]
