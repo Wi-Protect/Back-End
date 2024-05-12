@@ -229,18 +229,30 @@ def addLastQueue(data):
     lastQueue.append(data)
 
 
+ifStandUpDetected = False
+
+
 def lastOutput(inpt):
     global lastQueue
+    global ifStandUpDetected
 
     addLastQueue(inpt)
 
     if (inpt == 1):
-        return 1
+        ifStandUpDetected = True
+        return 0
 
     else:
-        print("Last Queue :", lastQueue)
-        most_frequent = max(set(lastQueue), key=lastQueue.count)
-        return most_frequent
+        if ifStandUpDetected:
+            ifStandUpDetected = False
+            if inpt == 2 or inpt == 1:
+                return 1
+            else:
+                return 0
+        else:
+            print("Last Queue :", lastQueue)
+            most_frequent = max(set(lastQueue), key=lastQueue.count)
+            return most_frequent
 
 
 def getLastOutput(inpt):
