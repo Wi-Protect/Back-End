@@ -238,7 +238,7 @@ def lastOutput(inpt):
         return 1
 
     else:
-        print("Most Frequent :", most_frequent)
+        print("Last Queue :", lastQueue)
         most_frequent = max(set(lastQueue), key=lastQueue.count)
         return most_frequent
 
