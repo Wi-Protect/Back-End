@@ -366,7 +366,7 @@ def getPredictionsBackground():
 
 def playAlarm():
     # print("Playing Alarm")
-    soundPath = "classic-alarm.wav"
+    soundPath = "alarms/classic-alarm.wav"
     os.system("aplay " + soundPath + " > /dev/null 2>&1")
 
 def getPredictionsBackground():
