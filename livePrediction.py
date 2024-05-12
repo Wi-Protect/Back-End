@@ -10,6 +10,7 @@ import pywt
 import pandas as pd
 import time
 import threading
+import os
 
 from notificationSender import send_notification
 
@@ -334,7 +335,7 @@ def calibrate():
         wavelet = getWavelet(pd.DataFrame(forTrain))
         wavelet_list = np.vstack([wavelet_list, wavelet])
 
-        print("Data Point Collected : ", i)
+        print("\tData Point Collected : ", i+1)
 
     wavelet_list = np.delete(wavelet_list, np.s_[:1], axis=0)
 
@@ -363,6 +364,10 @@ def getPredictionsBackground():
     thread = threading.Thread(target=getPredictionsBackground)
     thread.start()
 
+def playAlarm():
+    # print("Playing Alarm")
+    soundPath = "classic-alarm.wav"
+    os.system("aplay " + soundPath + " > /dev/null 2>&1")
 
 def getPredictionsBackground():
     global recent
@@ -376,9 +381,9 @@ def getPredictionsBackground():
 
         pred = getPrediction(csi_data)
 
-        print("Time" + str(datetime.datetime.now()))
+        print("\tTime: " + str(datetime.datetime.now()), end="")
 
-        print("activity" + str(pred))
+        print("\tPrediction:  ACTIVITY" + str(pred))
 
         if (pred == 1):
             recent = [0, 0, 0, 0, 0]
@@ -390,6 +395,7 @@ def getPredictionsBackground():
         if (pred == 2):
             print("Intruder Detected.")
             send_notification("Intruder Detected", "Intruder Detected")
+            playAlarm()
             # print("Intruder Detected")
             recent = [0, 0, 0, 0, 0]
             lastQueue = [0, 0, 0, 0, 0]
