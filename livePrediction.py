@@ -55,7 +55,7 @@ DAY_TIME = 1
 
 mode = NIGHT_TIME
 
-lastQueue = [0, 0, 0, 0, 0]
+lastQueue = [0, 0, 0, 0, 0, 0, 0]
 
 
 def csi_data_read_parse():
@@ -224,7 +224,7 @@ def get25(group):
 
 def addLastQueue(data):
     global lastQueue
-    if len(lastQueue) == 5:
+    if len(lastQueue) == 7:
         lastQueue.pop(0)
     lastQueue.append(data)
 
@@ -364,10 +364,12 @@ def getPredictionsBackground():
     thread = threading.Thread(target=getPredictionsBackground)
     thread.start()
 
+
 def playAlarm():
     # print("Playing Alarm")
     soundPath = "alarms/classic-alarm.wav"
     os.system("aplay " + soundPath + " > /dev/null 2>&1")
+
 
 def getPredictionsBackground():
     global recent
