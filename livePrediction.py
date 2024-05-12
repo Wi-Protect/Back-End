@@ -284,7 +284,7 @@ def predictionMapping(prediction):
 
     else:
 
-        if prediction == 0 or prediction == 4:
+        if prediction == 0 or prediction == 4 or prediction == 5:
             return 0
         else:
             return 2
