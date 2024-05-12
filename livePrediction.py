@@ -393,7 +393,7 @@ def getPredictionsBackground():
             time.sleep(60*5)
 
         if (pred == 2):
-            print("Intruder Detected.")
+            print("\t\tIntruder Detected.")
             send_notification("Intruder Detected", "Intruder Detected")
             playAlarm()
             # print("Intruder Detected")
