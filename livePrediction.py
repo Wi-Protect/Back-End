@@ -232,8 +232,12 @@ def lastOutput(inpt):
     global lastQueue
     addLastQueue(inpt)
 
-    most_frequent = max(set(lastQueue), key=lastQueue.count)
-    return most_frequent
+    if (inpt == 1):
+        return inpt
+
+    else:
+        most_frequent = max(set(lastQueue), key=lastQueue.count)
+        return most_frequent
 
 
 def getLastOutput(inpt):
