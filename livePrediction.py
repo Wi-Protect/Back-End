@@ -367,6 +367,7 @@ def getPredictionsBackground():
 def playAlarm():
     # print("Playing Alarm")
     soundPath = "alarms/classic-alarm.wav"
+    os.system("amixer set Master 100%")
     os.system("aplay " + soundPath + " > /dev/null 2>&1")
 
 def getPredictionsBackground():
