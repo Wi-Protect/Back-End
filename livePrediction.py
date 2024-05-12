@@ -236,14 +236,18 @@ def lastOutput(inpt):
     global lastQueue
     global ifStandUpDetected
 
-    addLastQueue(inpt)
-
     if (inpt == 1):
+        if not ifStandUpDetected:
+            ifStandUpDetected = True
+            addLastQueue(inpt)
+        else:
+            addLastQueue(0)
+
         print("Input == 1")
-        ifStandUpDetected = True
         return 0
 
     else:
+        addLastQueue(inpt)
         if ifStandUpDetected:
             print("Is standup detcted :", ifStandUpDetected)
             ifStandUpDetected = False
