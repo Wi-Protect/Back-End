@@ -23,7 +23,7 @@ def stop_prediction():
     return "Prediction stopped"
 
 
-@app.route('/night-mode', methods=['POST'])
+@app.route('/night-     mode', methods=['POST'])
 def night_mode():
     changeModeToNight()
     return "Night mode activated"
